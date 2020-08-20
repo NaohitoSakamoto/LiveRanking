@@ -14,9 +14,13 @@ class Controller extends BaseController
 
     public function index()
     {
+        $liveData = array();
+
         $handleYoutubeAPI = new HandleYoutubeAPI();
         $handleYoutubeAPI->APIKeyAuthorization(); //APIキー認証を行う
-        $handleYoutubeAPI->GetLiveInformation(); //ライブ情報を取得する
-        return view('index');
+        $liveData = $handleYoutubeAPI->GetLiveInformation(); //ライブ情報を取得する
+
+        //return view('welcome');
+        return view('index', compact('liveData'));
     }
 }

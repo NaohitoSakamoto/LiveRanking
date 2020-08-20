@@ -5,14 +5,10 @@ namespace App;
 use Google_Client;
 use Google_Service_YouTube;
 use Google_Service_Drive;
-use Debug;
-use Log;
 
 class HandleYoutubeAPI
 {
     private static $youtube;
-    private const APIKEY = "AIzaSyAPO5w-vOzRqn_e-YoIkzLyxu_607oCgyg";
-
     private $videoIDs;
     private $channelIDs;
     private $channelTitles;
@@ -24,10 +20,6 @@ class HandleYoutubeAPI
     private $concurrentViewers;
     private $actualStartTimes;
 
-    public static function GetAPIKey(){
-        return self::APIKEY;
-    }
-
     //APIキー認証を行う
     public function APIKeyAuthorization(){
         if (!file_exists(__DIR__ . '/../vendor/autoload.php')) {
@@ -36,53 +28,8 @@ class HandleYoutubeAPI
         require_once __DIR__ . '/../vendor/autoload.php';
 
         $client = new Google_Client();
-        $client->setDeveloperKey(self::APIKEY);
+        $client->setDeveloperKey(env('YOUTUBE_API_KEY'));
         $this::$youtube = new Google_Service_YouTube($client);
-    }
-
-    //OAuth認証を行う
-    public function OAuthAuthorization(){
-        if (!file_exists(__DIR__ . '/../vendor/autoload.php')) {
-            throw new \Exception('please run "composer require google/apiclient:~2.0" in "' . __DIR__ .'"');
-        }
-        require_once __DIR__ . '/../vendor/autoload.php';
-        session_start();
-
-        $OAUTH2_CLIENT_ID = '1043223131231-dc775t4pqouh8jmtka4g1plih737f10s.apps.googleusercontent.com';
-        $OAUTH2_CLIENT_SECRET = 'lkpoUiMkFSvgSrdfzKNlYOvb';
-
-        $client = new Google_Client();
-        $client->setClientId($OAUTH2_CLIENT_ID);
-        $client->setClientSecret($OAUTH2_CLIENT_SECRET);
-        $client->setScopes('https://www.googleapis.com/auth/youtube');
-        $redirect = filter_var('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'], FILTER_SANITIZE_URL);
-        $client->setRedirectUri($redirect);
-
-        $this::$youtube = new Google_Service_YouTube($client);
-
-        $tokenSessionKey = 'token-' . $client->prepareScopes();
-        if (isset($_GET['code'])) {
-            if (strval($_SESSION['state']) !== strval($_GET['state'])) {
-                die('The session state did not match.');
-            }
-            $client->authenticate($_GET['code']);
-            $_SESSION[$tokenSessionKey] = $client->getAccessToken();
-            header('Location: ' . $redirect);
-            exit();
-        }
-        if (isset($_SESSION[$tokenSessionKey])) {
-            $client->setAccessToken($_SESSION[$tokenSessionKey]);
-        }
-        if ($client->getAccessToken()) { // OAuth認証されているとき
-            $_SESSION[$tokenSessionKey] = $client->getAccessToken();
-        } else { // OAuth認証されていない時
-            $state = mt_rand();
-            $client->setState($state);
-            $_SESSION['state'] = $state;
-            $authUrl = $client->createAuthUrl();
-            header('Location: ' . $authUrl);
-            exit();
-        }
     }
 
     public function GetLiveInformation(){
@@ -97,6 +44,7 @@ class HandleYoutubeAPI
         $videoThumbnails = array();
         $concurrentViewers = array();
         $actualStartTimes = array();
+        $liveData = array();
 
         try{
             $params = array(
@@ -129,8 +77,6 @@ class HandleYoutubeAPI
 
                 $searchResponse = $this::$youtube->search->listSearch("id, snippet", $params);
 
-                print("検索結果:" . $searchResponse["pageInfo"]["totalResults"] . "<br>");
-
                 foreach($searchResponse['items'] as $item){
                     array_push($tmpVideoIDs, $item['id']['videoId']);
                     array_push($tmpChannelIDs, $item['snippet']['channelId']);
@@ -152,7 +98,7 @@ class HandleYoutubeAPI
                     for($j = 0; $j < count($tmpChannelIDs); $j++){
                         if($item['id'] == $tmpChannelIDs[$j]){
                             $tmpChannelTitles[$j] = $item['snippet']['title'];
-                            $tmpChannelThumbnails[$j] = $item['snippet']['thumbnails']['url'];
+                            $tmpChannelThumbnails[$j] = $item['snippet']['thumbnails']['default']['url'];
                             $tmpCountries[$j] = $item['snippet']['country'];
                         }
                     }
@@ -171,7 +117,7 @@ class HandleYoutubeAPI
                         if($item['id'] == $tmpVideoIDs[$j]){
                             $tmpVideoTitles[$j] = $item['snippet']['title'];
                             $tmpVideoDescriptions[$j] = $item['snippet']['description'];
-                            $tmpVideoThumbnails[$j] = $item['snippet']['thumbnails']['url'];
+                            $tmpVideoThumbnails[$j] = $item['snippet']['thumbnails']['default']['url'];
                             $tmpConcurrentViewers[$j] = $item['liveStreamingDetails']['concurrentViewers'];
                             $tmpActualStartTimes[$j] = $item['liveStreamingDetails']['actualStartTime'];
                         }
@@ -200,7 +146,7 @@ class HandleYoutubeAPI
                 }
 
                 for($j = 0; $j < count($tmpVideoTitles); $j++){
-                    print("title:" . $tmpVideoTitles[$j] . ", country:" . $tmpCountries[$j] . ", concurrentViewers:" . $tmpConcurrentViewers[$j] . "<br>");
+                    //print("title:" . $tmpVideoTitles[$j] . ", country:" . $tmpCountries[$j] . ", concurrentViewers:" . $tmpConcurrentViewers[$j] . "<br>");
                 }
 
                 $videoIDs = array_merge($videoIDs, $tmpVideoIDs);
@@ -216,7 +162,6 @@ class HandleYoutubeAPI
 
                 /* 次のページが存在する場合 */
                 if($searchResponse["nextPageToken"] != ""){
-                    print("nextPageToken:" . $searchResponse["nextPageToken"] . "<br>");
                     $nextPageToken = $searchResponse["nextPageToken"];
                     $params['pageToken'] = $nextPageToken;
                 }
@@ -225,11 +170,25 @@ class HandleYoutubeAPI
                     break;
                 }
             }
+            /* それぞれのライブ情報の配列を1つに変換して戻り値とする */
+            $liveData = array(
+                'videoIDs' => $videoIDs,
+                'channelIDs' => $channelIDs,
+                'channelTitles' => $channelTitles,
+                'channelThumbnails' => $channelThumbnails,
+                'countries' => $countries,
+                'videoTitles' => $videoTitles,
+                'videoDescriptions' => $videoDescriptions,
+                'videoThumbnails' => $videoThumbnails,
+                'concurrentViewers' => $concurrentViewers,
+                'actualStartTimes' => $actualStartTimes,
+            );
         } catch (Google_Service_Exception $e) {
             echo sprintf('<p>A service error occurred: <code>%s</code></p>', htmlspecialchars($e->getMessage()));
         } catch (Google_Exception $e) {
             echo sprintf('<p>An client error occurred: <code>%s</code></p>', htmlspecialchars($e->getMessage()));
         }
+        return $liveData;
     }
 }
 ?>
