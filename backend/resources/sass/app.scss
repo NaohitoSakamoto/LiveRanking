@@ -1,1 +1,55 @@
-//
+body {
+    max-width: 1284px;
+    margin: 0 auto;
+    background-color: #191919;
+
+    .item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 16px;
+
+        img {
+            height: 138px;
+            width: 246px;
+            margin-right: 16px;
+        }
+
+        .live-info {
+            width: 600px;
+
+            p > a {
+                text-decoration: none;
+            }
+
+            .videoTitle {
+                margin-top: 0px;
+                margin-bottom: 0px;
+                a {
+                    font-size: 18px;
+                    color: #fff;
+                }
+            }
+
+            .videoInfo, .videoDetail {
+                font-size: 13px;
+                color: #aaa;
+            }
+
+            .videoInfo {
+                margin-top: 0px;
+                a {
+                    color: #aaa;
+                }
+            }
+
+            .videoInfo > a:hover {
+                color: #fff;
+            }
+
+            .videoDetail {
+                margin-bottom: 0px;
+                word-break:break-all;
+            }
+        }
+    }
+}

@@ -117,7 +117,7 @@ class HandleYoutubeAPI
                         if($item['id'] == $tmpVideoIDs[$j]){
                             $tmpVideoTitles[$j] = $item['snippet']['title'];
                             $tmpVideoDescriptions[$j] = $item['snippet']['description'];
-                            $tmpVideoThumbnails[$j] = $item['snippet']['thumbnails']['default']['url'];
+                            $tmpVideoThumbnails[$j] = $item['snippet']['thumbnails']['medium']['url'];
                             $tmpConcurrentViewers[$j] = $item['liveStreamingDetails']['concurrentViewers'];
                             $tmpActualStartTimes[$j] = $item['liveStreamingDetails']['actualStartTime'];
                         }
