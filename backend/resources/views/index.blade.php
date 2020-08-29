@@ -9,7 +9,12 @@
         <div class="items">
             @for ($i = 0; $i < count($liveData['videoIDs']); $i++)
                 <div class="item">
-                    <img src="{{$liveData['videoThumbnails'][$i]}}" alt="動画のサムネイル">
+                    <div class="live-rank">
+                        <p>{{$i}}</p>
+                    </div>
+                    <div class="live-thumbnails">
+                        <a href="{{url('https://www.youtube.com/watch?v=' . $liveData['videoIDs'][$i])}}"><img src="{{$liveData['videoThumbnails'][$i]}}" alt="動画のサムネイル"></a>
+                    </div>
                     <div class="live-info">
                         <p class="videoTitle"><a href="{{url('https://www.youtube.com/watch?v=' . $liveData['videoIDs'][$i])}}">{{$liveData['videoTitles'][$i]}}</a></p>
                         <p class="videoInfo">

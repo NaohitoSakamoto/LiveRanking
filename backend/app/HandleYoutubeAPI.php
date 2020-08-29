@@ -50,6 +50,7 @@ class HandleYoutubeAPI
             $params = array(
                 'eventType' => 'live',
                 'type' => 'video',
+                'videoType' => 'any',
                 'regionCode' => 'JP',
                 'relevanceLanguage' => 'ja',
                 'maxResults' => 25,
@@ -125,29 +126,26 @@ class HandleYoutubeAPI
                 }
 
                 /* 日本のチャンネルじゃない情報を配列から削除 */
-                for($j = (count($tmpVideoIDs) - 1); $j >= 0; $j--){
+                // for($j = (count($tmpVideoIDs) - 1); $j >= 0; $j--){
+                //
+                //     /* 日本のチャンネルの場合、もしくはタイトルに日本語が含まれる場合 */
+                //     if($tmpCountries[$j] == "JP" or preg_match( "/[ぁ-ん]+|[ァ-ヴー]+/u", $tmpVideoTitles[$j])){
+                //         /* 何もしない */
+                //     }
+                //     else{
+                //         array_splice($tmpVideoIDs, $j, 1);
+                //         array_splice($tmpVideoTitles, $j, 1);
+                //         array_splice($tmpVideoDescriptions, $j, 1);
+                //         array_splice($tmpVideoThumbnails, $j, 1);
+                //         array_splice($tmpConcurrentViewers, $j, 1);
+                //         array_splice($tmpActualStartTimes, $j, 1);
+                //         array_splice($tmpChannelIDs, $j, 1);
+                //         array_splice($tmpChannelTitles, $j, 1);
+                //         array_splice($tmpChannelThumbnails, $j, 1);
+                //         array_splice($tmpCountries, $j, 1);
+                //     }
+                // }
 
-                    /* 日本のチャンネルの場合、もしくはタイトルに日本語が含まれる場合 */
-                    if($tmpCountries[$j] == "JP" or preg_match( "/[ぁ-ん]+|[ァ-ヴー]+/u", $tmpVideoTitles[$j])){
-                        /* 何もしない */
-                    }
-                    else{
-                        array_splice($tmpVideoIDs, $j, 1);
-                        array_splice($tmpVideoTitles, $j, 1);
-                        array_splice($tmpVideoDescriptions, $j, 1);
-                        array_splice($tmpVideoThumbnails, $j, 1);
-                        array_splice($tmpConcurrentViewers, $j, 1);
-                        array_splice($tmpActualStartTimes, $j, 1);
-                        array_splice($tmpChannelIDs, $j, 1);
-                        array_splice($tmpChannelTitles, $j, 1);
-                        array_splice($tmpChannelThumbnails, $j, 1);
-                        array_splice($tmpCountries, $j, 1);
-                    }
-                }
-
-                for($j = 0; $j < count($tmpVideoTitles); $j++){
-                    //print("title:" . $tmpVideoTitles[$j] . ", country:" . $tmpCountries[$j] . ", concurrentViewers:" . $tmpConcurrentViewers[$j] . "<br>");
-                }
 
                 $videoIDs = array_merge($videoIDs, $tmpVideoIDs);
                 $channelIDs = array_merge($channelIDs, $tmpChannelIDs);
@@ -170,6 +168,7 @@ class HandleYoutubeAPI
                     break;
                 }
             }
+
             /* それぞれのライブ情報の配列を1つに変換して戻り値とする */
             $liveData = array(
                 'videoIDs' => $videoIDs,

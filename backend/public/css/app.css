@@ -1,23 +1,27 @@
 body {
   max-width: 1284px;
   margin: 0 auto;
-  background-color: #191919;
 }
 
 body .item {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 16px;
+  margin: 0px auto 16px;
 }
 
-body .item img {
+body .item .live-rank {
+  height: 138px;
+  width: 100px;
+}
+
+body .item .live-thumbnails a > img {
   height: 138px;
   width: 246px;
   margin-right: 16px;
 }
 
 body .item .live-info {
-  width: 600px;
+  width: 922px;
 }
 
 body .item .live-info p > a {
@@ -31,13 +35,12 @@ body .item .live-info .videoTitle {
 
 body .item .live-info .videoTitle a {
   font-size: 18px;
-  color: #fff;
+  color: #000;
 }
 
 body .item .live-info .videoInfo,
 body .item .live-info .videoDetail {
   font-size: 13px;
-  color: #aaa;
 }
 
 body .item .live-info .videoInfo {
@@ -45,11 +48,11 @@ body .item .live-info .videoInfo {
 }
 
 body .item .live-info .videoInfo a {
-  color: #aaa;
+  color: #000;
 }
 
 body .item .live-info .videoInfo > a:hover {
-  color: #fff;
+  color: #aaa;
 }
 
 body .item .live-info .videoDetail {

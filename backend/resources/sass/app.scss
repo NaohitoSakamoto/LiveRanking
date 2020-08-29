@@ -1,21 +1,27 @@
 body {
     max-width: 1284px;
     margin: 0 auto;
-    background-color: #191919;
 
     .item {
         display: flex;
         align-items: flex-start;
-        margin-bottom: 16px;
+        margin: 0px auto 16px;
 
-        img {
+        .live-rank {
             height: 138px;
-            width: 246px;
-            margin-right: 16px;
+            width: 100px;
+        }
+
+        .live-thumbnails {
+            a > img {
+                height: 138px;
+                width: 246px;
+                margin-right: 16px;
+            }
         }
 
         .live-info {
-            width: 600px;
+            width: 922px;
 
             p > a {
                 text-decoration: none;
@@ -26,24 +32,23 @@ body {
                 margin-bottom: 0px;
                 a {
                     font-size: 18px;
-                    color: #fff;
+                    color: #000;
                 }
             }
 
             .videoInfo, .videoDetail {
                 font-size: 13px;
-                color: #aaa;
             }
 
             .videoInfo {
                 margin-top: 0px;
                 a {
-                    color: #aaa;
+                    color: #000;
                 }
             }
 
             .videoInfo > a:hover {
-                color: #fff;
+                color: #aaa;
             }
 
             .videoDetail {
