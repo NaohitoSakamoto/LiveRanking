@@ -15,7 +15,7 @@ class HandleYoutubeDB
             $youtubeTable->channelThumbnail = $liveData['channelThumbnails'][$i];
             $youtubeTable->country = $liveData['countries'][$i];
             $youtubeTable->videoTitle = $liveData['videoTitles'][$i];
-            $youtubeTable->videoDescription = $liveData['videoDescriptions'][$i];
+            $youtubeTable->videoDescription = mb_strimwidth($liveData['videoDescriptions'][$i], 0, 150, "...", "UTF-8");
             $youtubeTable->videoThumbnail = $liveData['videoThumbnails'][$i];
             $youtubeTable->concurrentViewer = $liveData['concurrentViewers'][$i];
             $youtubeTable->actualStartTime = $liveData['actualStartTimes'][$i];
