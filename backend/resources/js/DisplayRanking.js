@@ -5,8 +5,8 @@ export default class DisplayRanking extends Component {
     constructor(){
         super();
         this.state = {
-            ranks:[]
-            count: 0
+            ranks:[],
+            pageNumber: 1
         }
         this.onScroll = this.onScroll.bind(this);
     }
@@ -29,7 +29,12 @@ export default class DisplayRanking extends Component {
 
     onScroll() {
         if (this.hasReachedBottom()) {
+            this.setState({ count : this.state.pageNumber + 1});
             getLiveInformation();
+
+            if (this.state.pageNumber >= 4) {
+                window.removeEventListener("scroll", this.onScroll);
+            }
         }
     };
 
@@ -43,7 +48,7 @@ export default class DisplayRanking extends Component {
         axios
             .get('/api/get', {
                 params: {
-                    pageNumber: 0
+                    pageNumber: this.state.pageNumber
                 }
             })
             .then((res) => {
@@ -67,7 +72,7 @@ function MakeItems(props){
                     <p>{index}</p>
                 </div>
                 <div class="live-thumbnails">
-                    <a href="https://www.youtube.com/watch?v={rank.videoID}"><img src="{rank.videoThumbnail}" alt="動画のサムネイル"></a>
+                    <a href="https://www.youtube.com/watch?v={rank.videoID}"><img src="{rank.videoThumbnail}" alt="動画のサムネイル" /></a>
                 </div>
                 <div class="live-info">
                     <p class="videoTitle"><a href="https://www.youtube.com/watch?v={rank.videoID}">{rank.videoTitle}</a></p>
