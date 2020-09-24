@@ -2,13 +2,14 @@
 
 namespace App;
 
-use YoutubeTable;
+use App\YoutubeTable;
 
 class HandleYoutubeDB
 {
     public static function InsertDB($liveData){
+	YoutubeTable::truncate();
         for ($i = 0; $i < count($liveData['videoIDs']); $i++) {
-            $youtubeTable = new YoutubeTable;
+	    $youtubeTable = new YoutubeTable;
             $youtubeTable->videoID = $liveData['videoIDs'][$i];
             $youtubeTable->channelID = $liveData['channelIDs'][$i];
             $youtubeTable->channelTitle = $liveData['channelTitles'][$i];

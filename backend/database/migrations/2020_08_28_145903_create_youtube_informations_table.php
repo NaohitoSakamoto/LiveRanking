@@ -19,14 +19,13 @@ class CreateYoutubeInformationsTable extends Migration
             $table->string('channelID');
             $table->string('channelTitle');
             $table->string('channelThumbnail');
-            $table->string('country');
+            $table->string('country')->nullable();
             $table->string('videoTitle');
             $table->string('videoDescription');
             $table->string('videoThumbnail');
-            $table->integer('concurrentViewer');
+            $table->integer('concurrentViewer')->nullable();
             $table->string('actualStartTime');
             $table->timestamps();
-            $table->index('concurrentViewer');
         });
     }
 

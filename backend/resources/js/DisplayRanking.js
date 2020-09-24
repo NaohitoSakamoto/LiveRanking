@@ -6,7 +6,8 @@ export default class DisplayRanking extends Component {
         super();
         this.state = {
             ranks:[],
-            pageNumber: 1
+            pageNumber: 0,
+	    isLoad: false
         }
         this.onScroll = this.onScroll.bind(this);
     }
@@ -28,35 +29,33 @@ export default class DisplayRanking extends Component {
     }
 
     onScroll() {
-        if (this.hasReachedBottom()) {
-            this.setState({ count : this.state.pageNumber + 1});
-            getLiveInformation();
-
-            if (this.state.pageNumber >= 4) {
-                window.removeEventListener("scroll", this.onScroll);
+	if (this.state.isLoad == true) {
+	    return;
+	}
+	
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+	    this.setState({ pageNumber : this.state.pageNumber + 1});
+	    this.getLiveInformation();
+	    this.setState({ isLoad : true});
+	    setTimeout(function(){this.setState({ isLoad : false});}.bind(this), 1000);
+	    if (this.state.pageNumber >= 3) {
+		 window.removeEventListener("scroll", this.onScroll, false);
             }
         }
-    };
-
-    hasReachedBottom() {
-        return (
-            document.body.offsetHeight + document.body.scrollTop === document.body.scrollHeight
-        );
     }
 
     getLiveInformation() {
         axios
-            .get('/api/get', {
+            .get('/api/live_informations', {
                 params: {
                     pageNumber: this.state.pageNumber
                 }
             })
             .then((res) => {
-                res.data.map((data) => {
-                    this.state.ranks.push({
-                        rank: data
-                    });
+                res.data.map((rank) => {
+                    this.state.ranks.push(rank);
                 });
+		this.setState(this.state.ranks);
             })
             .catch(error => {
                 console.log(error)
@@ -67,16 +66,16 @@ export default class DisplayRanking extends Component {
 function MakeItems(props){
     return props.ranks.map((rank, index) => {
         return(
-            <div class="item">
+            <div class="item" key={index}>
                 <div class="live-rank">
-                    <p>{index}</p>
+                    <p>{index + 1}</p>
                 </div>
                 <div class="live-thumbnails">
-                    <a href="https://www.youtube.com/watch?v={rank.videoID}"><img src="{rank.videoThumbnail}" alt="動画のサムネイル" /></a>
+                    <a href={"https://www.youtube.com/watch?v=" + rank.videoID}><img src={rank.videoThumbnail} alt="動画のサムネイル" /></a>
                 </div>
                 <div class="live-info">
-                    <p class="videoTitle"><a href="https://www.youtube.com/watch?v={rank.videoID}">{rank.videoTitle}</a></p>
-                    <p class="videoInfo"><a href="https://www.youtube.com/channel/{rank.channelID}}">{rank.channelTitle}</a>・{rank.concurrentViewer}人が視聴中</p>
+                    <p class="videoTitle"><a href={"https://www.youtube.com/watch?v=" + rank.videoID}>{rank.videoTitle}</a></p>
+                    <p class="videoInfo"><a href={"https://www.youtube.com/channel/" + rank.channelID}>{rank.channelTitle}</a>・{rank.concurrentViewer}人が視聴中</p>
                     <p class="videoDetail">{rank.videoDescription}</p>
                 </div>
             </div>

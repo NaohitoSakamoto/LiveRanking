@@ -10,8 +10,16 @@ body .item {
 }
 
 body .item .live-rank {
+  display: flex;
   height: 138px;
   width: 100px;
+  justify-content: center;
+  align-items: center;
+}
+
+body .item .live-rank p {
+  font-family: "Lobster", cursive;
+  font-size: 2em;
 }
 
 body .item .live-thumbnails a > img {

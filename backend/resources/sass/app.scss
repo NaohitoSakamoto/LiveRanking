@@ -8,8 +8,16 @@ body {
         margin: 0px auto 16px;
 
         .live-rank {
+	    display: flex;
             height: 138px;
             width: 100px;
+	    justify-content: center;
+	    align-items: center;
+	    p {
+		font-family: 'Lobster', cursive;
+		font-size: 2em;
+		//text-align: center;
+	    }
         }
 
         .live-thumbnails {
