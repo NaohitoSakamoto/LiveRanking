@@ -126,39 +126,49 @@ class HandleYoutubeAPI
 
 		foreach ($videoResponse['items'] as $item) {
 			for($j = 0; $j < count($tmpVideoIDs); $j++){
-			if($item['id'] == $tmpVideoIDs[$j]){
-				$tmpVideoTitles[$j] = $item['snippet']['title'];
-				$tmpVideoDescriptions[$j] = $item['snippet']['description'];
-				$tmpVideoThumbnails[$j] = $item['snippet']['thumbnails']['medium']['url'];
-				$tmpConcurrentViewers[$j] = $item['liveStreamingDetails']['concurrentViewers'];
-				$tmpActualStartTimes[$j] = $item['liveStreamingDetails']['actualStartTime'];
-				if ($tmpConcurrentViewers[$j] == ""){
-					print("同時視聴者にNULLが書き込まれました\n");
+				if($item['id'] == $tmpVideoIDs[$j]){
+					$tmpVideoTitles[$j] = $item['snippet']['title'];
+					$tmpVideoDescriptions[$j] = $item['snippet']['description'];
+					$tmpVideoThumbnails[$j] = $item['snippet']['thumbnails']['medium']['url'];
+					$tmpConcurrentViewers[$j] = $item['liveStreamingDetails']['concurrentViewers'];
+					$tmpActualStartTimes[$j] = $item['liveStreamingDetails']['actualStartTime'];
 				}
-			}
 			}
 		}
 
-		/* 日本のチャンネルじゃない情報を配列から削除 */
-		// for($j = (count($tmpVideoIDs) - 1); $j >= 0; $j--){
-		//
-		//     /* 日本のチャンネルの場合、もしくはタイトルに日本語が含まれる場合 */
-		//     if($tmpCountries[$j] == "JP" or preg_match( "/[ぁ-ん]+|[ァ-ヴー]+/u", $tmpVideoTitles[$j])){
-		//         /* 何もしない */
-		//     }
-		//     else{
-		//         array_splice($tmpVideoIDs, $j, 1);
-		//         array_splice($tmpVideoTitles, $j, 1);
-		//         array_splice($tmpVideoDescriptions, $j, 1);
-		//         array_splice($tmpVideoThumbnails, $j, 1);
-		//         array_splice($tmpConcurrentViewers, $j, 1);
-		//         array_splice($tmpActualStartTimes, $j, 1);
-		//         array_splice($tmpChannelIDs, $j, 1);
-		//         array_splice($tmpChannelTitles, $j, 1);
-		//         array_splice($tmpChannelThumbnails, $j, 1);
-		//         array_splice($tmpCountries, $j, 1);
-		//     }
-		// }
+		for($j = (count($tmpVideoIDs) - 1); $j >= 0; $j--){
+			/* 同時視聴者数が空のときその放送の情報を配列から削除 */
+			if ($tmpConcurrentViewers[$j] == ""){
+				print("同時視聴者にNULLが書き込まれました\n");
+				array_splice($tmpVideoIDs, $j, 1);
+		        array_splice($tmpVideoTitles, $j, 1);
+		        array_splice($tmpVideoDescriptions, $j, 1);
+		        array_splice($tmpVideoThumbnails, $j, 1);
+		        array_splice($tmpConcurrentViewers, $j, 1);
+		        array_splice($tmpActualStartTimes, $j, 1);
+		        array_splice($tmpChannelIDs, $j, 1);
+		        array_splice($tmpChannelTitles, $j, 1);
+		        array_splice($tmpChannelThumbnails, $j, 1);
+		        array_splice($tmpCountries, $j, 1);				
+			}
+
+		    /* 日本のチャンネルの場合、もしくはタイトルに日本語が含まれる場合 */
+		    // if($tmpCountries[$j] == "JP" or preg_match( "/[ぁ-ん]+|[ァ-ヴー]+/u", $tmpVideoTitles[$j])){
+		    //     /* 何もしない */
+		    // }
+		    // else{
+		    //     array_splice($tmpVideoIDs, $j, 1);
+		    //     array_splice($tmpVideoTitles, $j, 1);
+		    //     array_splice($tmpVideoDescriptions, $j, 1);
+		    //     array_splice($tmpVideoThumbnails, $j, 1);
+		    //     array_splice($tmpConcurrentViewers, $j, 1);
+		    //     array_splice($tmpActualStartTimes, $j, 1);
+		    //     array_splice($tmpChannelIDs, $j, 1);
+		    //     array_splice($tmpChannelTitles, $j, 1);
+		    //     array_splice($tmpChannelThumbnails, $j, 1);
+		    //     array_splice($tmpCountries, $j, 1);
+		    // }
+		}
 
 
 		$videoIDs = array_merge($videoIDs, $tmpVideoIDs);

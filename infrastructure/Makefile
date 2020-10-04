@@ -105,3 +105,5 @@ ide-helper:
 	docker-compose exec app php artisan ide-helper:models --nowrite
 get-live-information:
 	docker-compose exec app php artisan GetLiveInformation:Youtube
+test-live-information:
+	docker-compose exec app ./vendor/bin/phpunit
