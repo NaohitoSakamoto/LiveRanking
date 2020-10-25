@@ -23,7 +23,7 @@ class CreateYoutubeInformationsTable extends Migration
             $table->string('videoTitle');
             $table->string('videoDescription');
             $table->string('videoThumbnail');
-            $table->integer('concurrentViewer')->nullable();
+            $table->integer('concurrentViewer')->index();
             $table->string('actualStartTime');
             $table->timestamps();
         });

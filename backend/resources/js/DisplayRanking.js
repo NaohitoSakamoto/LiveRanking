@@ -5,9 +5,9 @@ export default class DisplayRanking extends Component {
     constructor(){
         super();
         this.state = {
-            ranks:[],
-            pageNumber: 0,
-	    isLoad: false
+            ranks:[],　/* ライブ情報を格納する配列 */
+            pageNumber: 0, /* 何ページ目を取得するのかに使用する */
+	        isLoad: false /* スクロールイベントが連続発火し、1ページずつライブ情報が取得できなくなることを防ぐためのフラグ */
         }
         this.onScroll = this.onScroll.bind(this);
     }
@@ -28,22 +28,27 @@ export default class DisplayRanking extends Component {
         window.addEventListener("scroll", this.onScroll, false);
     }
 
+    /* スクロールイベント関数 */
     onScroll() {
-	if (this.state.isLoad == true) {
-	    return;
-	}
-	
+        /* ライブ情報を取得して1秒間スクロールイベント関数を実行しない */
+        if (this.state.isLoad == true) {
+            return;
+        }
+        /* スクロールバーが一番下に来た時 */
         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-	    this.setState({ pageNumber : this.state.pageNumber + 1});
-	    this.getLiveInformation();
-	    this.setState({ isLoad : true});
-	    setTimeout(function(){this.setState({ isLoad : false});}.bind(this), 1000);
-	    if (this.state.pageNumber >= 3) {
-		 window.removeEventListener("scroll", this.onScroll, false);
+            this.setState({ pageNumber : this.state.pageNumber + 1});
+            this.getLiveInformation();
+            this.setState({ isLoad : true});
+            /* スクロールイベントが連続発火しスクロールバーが一番下に来た時にすべてのライブ情報を取得するのを防ぐための処理 */
+            setTimeout(function(){this.setState({ isLoad : false});}.bind(this), 1000);
+            /* 全ページ取得し終わったらスクロールイベントを外す */
+            if (this.state.pageNumber >= 3) {
+                window.removeEventListener("scroll", this.onScroll, false);
             }
         }
     }
 
+    /* ライブ情報を取得する関数 */
     getLiveInformation() {
         axios
             .get('/api/live_informations', {
@@ -53,9 +58,9 @@ export default class DisplayRanking extends Component {
             })
             .then((res) => {
                 res.data.map((rank) => {
-                    this.state.ranks.push(rank);
+                    this.state.ranks.push(rank); /* 取得したライブ情報を格納する */
                 });
-		this.setState(this.state.ranks);
+		        this.setState(this.state.ranks);
             })
             .catch(error => {
                 console.log(error)

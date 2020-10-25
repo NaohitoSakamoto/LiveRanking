@@ -8,6 +8,7 @@
         <link href="{{ asset('/css/app.css') }}" rel="stylesheet">
     </head>
     <body>
+        <h1><p>Youtube Live Ranking</p></h1>
         <div id="react-display-ranking"></div>
         <script src="{{ asset('js/app.js')}}"></script>
     </body>

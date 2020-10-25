@@ -18,9 +18,10 @@ class Controller extends BaseController
         return view('index');
     }
 
+    /* APIを叩いたときに行われる処理 */
     public function GetLiveInformationFromDB(Request $request){
         $pageNumber = $request->input('pageNumber'); 
-        $liveData = DB::table('youtube_informations')->offset(25 * $pageNumber)->limit(25)->get();
-	return $liveData;
+        $liveData = DB::table('youtube_informations')->orderBy('concurrentViewer', 'desc')->offset(25 * $pageNumber)->limit(25)->get();
+	    return $liveData;
     }
 }

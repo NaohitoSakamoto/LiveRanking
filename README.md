@@ -1,18 +1,35 @@
-# docker-laravel
+# LiveRanking
 
-![License](https://img.shields.io/github/license/ucan-lab/docker-laravel?color=f05340)
-![Stars](https://img.shields.io/github/stars/ucan-lab/docker-laravel?color=f05340)
-![Issues](https://img.shields.io/github/issues/ucan-lab/docker-laravel?color=f05340)
-![Forks](https://img.shields.io/github/forks/ucan-lab/docker-laravel?color=f05340)
+## このサイトについて
+Youtubeライブの同時視聴者数ランキングを表示するサイトです<br>
+以下のURLにある開発環境を利用して作成しました<br>
+https://github.com/ucan-lab/docker-laravel<br>
 
-## Introduction
+### フロントエンド側の処理
+- WebAPIを叩いてサーバーからYoutubeライブの情報を取得する
+- 画面の一番下までスクロールすると追加で25件Youtubeライブの情報を取得して表示する
 
-Build laravel development environment with docker-compose.
+### バックエンド側の処理
+- コマンドライン処理でYoutube Data APIを叩いてYoutubeライブ情報を取得してデータベースに格納する
+- Webページのリクエストが送られた場合、Viewをクライアントに送る
+- WebAPIのリクエストが送られた場合、データベースからYoutubeライブ情報を取得し、クライアントに送る
 
-## Usage
+## 使い方
+```bash
+$ git clone https://github.com/NaohitoSakamoto/LiveRanking.git
+$ cd LiveRanking/infrastructure
+$ make init
+```
 
-- [Build for Mac](https://github.com/ucan-lab/docker-laravel/wiki/Build-for-Mac)
-- [Build for Windows](https://github.com/ucan-lab/docker-laravel/wiki/Build-for-Windows)
+LiveRanking/backend/.envファイルの最終行にYoutube Data API のAPIキーを書き込む
+```
+YOUTUBE_API_KEY={APIキー}
+```
+
+LiveRanking/infrastructureでコマンドラインに以下のコマンドを打ち込む
+```bash
+$ make get-live-information
+```
 
 ## Container structure
 

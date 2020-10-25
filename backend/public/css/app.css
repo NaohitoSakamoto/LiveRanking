@@ -3,6 +3,22 @@ body {
   margin: 0 auto;
 }
 
+body h1 {
+  display: flex;
+  justify-content: center;
+}
+
+body h1 p {
+  margin: 0 auto;
+  padding: 10px;
+  color: white;
+  background-color: red;
+  font-family: "Lobster", cursive;
+  font-size: 1.5em;
+  text-align: center;
+  border-radius: 10px;
+}
+
 body .item {
   display: flex;
   align-items: flex-start;

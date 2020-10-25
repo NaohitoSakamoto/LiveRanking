@@ -2,6 +2,23 @@ body {
     max-width: 1284px;
     margin: 0 auto;
 
+    h1 {
+        display: flex;
+        justify-content: center;
+        //height: 1.5em;
+        
+        p {
+            margin: 0 auto;
+            padding: 10px;
+            color: white;
+            background-color: red;
+            font-family: 'Lobster', cursive;
+            font-size: 1.5em;
+            text-align: center;
+            border-radius: 10px;
+        }
+    }
+
     .item {
         display: flex;
         align-items: flex-start;
