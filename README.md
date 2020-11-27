@@ -2,6 +2,7 @@
 
 ## このサイトについて
 Youtubeライブの同時視聴者数ランキングを表示するサイトです<br>
+サイトURL:https://youtube-live-information.herokuapp.com/<br>
 以下のURLにある開発環境を利用して作成しました<br>
 https://github.com/ucan-lab/docker-laravel<br>
 
