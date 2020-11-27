@@ -3,7 +3,7 @@
 ## このサイトについて
 Youtubeライブの同時視聴者数ランキングを表示するサイトです<br>
 サイトURL:https://youtube-live-information.herokuapp.com/<br>
-以下のURLにある開発環境を利用して作成しました<br>
+以下のURLにある開発環境を利用してローカル開発環境を作成しました<br>
 https://github.com/ucan-lab/docker-laravel<br>
 
 ### フロントエンド側の処理
@@ -15,7 +15,7 @@ https://github.com/ucan-lab/docker-laravel<br>
 - Webページのリクエストが送られた場合、Viewをクライアントに送る
 - WebAPIのリクエストが送られた場合、データベースからYoutubeライブ情報を取得し、クライアントに送る
 
-## 使い方
+## 使い方(ローカル開発環境)
 ```bash
 $ git clone https://github.com/NaohitoSakamoto/LiveRanking.git
 $ cd LiveRanking/infrastructure
