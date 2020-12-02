@@ -1,4 +1,4 @@
-# LiveRanking
+# [LiveRanking](https://youtube-live-information.herokuapp.com/)
 
 ## このサイトについて
 Youtubeライブの同時視聴者数ランキングを表示するサイトです<br>
