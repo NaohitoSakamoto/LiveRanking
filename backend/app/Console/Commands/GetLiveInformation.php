@@ -42,13 +42,16 @@ class GetLiveInformation extends Command
         $liveData = array();
         $handleYoutubeAPI = new HandleYoutubeAPI();
         $handleYoutubeAPI->APIKeyAuthorization(); //APIキー認証を行う
-        $liveData = $handleYoutubeAPI->GetLiveInformation(); //ライブ情報を取得する
+
+        for ($i = 0; $i < 10; $i++) {
+            $liveData = $handleYoutubeAPI->GetLiveInformation(); //ライブ情報を取得する
         
-        if ($liveData != 0) {	
-            print("データベースの更新を行います\n");
-            HandleYoutubeDB::InsertDB($liveData);//取得したライブ情報をデータベースに格納する
-        } else {
-            print("例外が発生したのでデータベースの更新は行われませんでした\n");
+            if ($liveData != 0) {
+                print("データベースの更新を行います\n");
+                HandleYoutubeDB::InsertDB($liveData);//取得したライブ情報をデータベースに格納する
+            } else {
+                print("例外が発生したのでデータベースの更新は行われませんでした\n");
+            }
         }
     }
 }
