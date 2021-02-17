@@ -44,6 +44,7 @@ class GetLiveInformation extends Command
         $handleYoutubeAPI->APIKeyAuthorization(); //APIキー認証を行う
 
         for ($i = 0; $i < 10; $i++) {
+            print(($i + 1) . "回目\n");
             $liveData = $handleYoutubeAPI->GetLiveInformation(); //ライブ情報を取得する
         
             if ($liveData != 0) {
